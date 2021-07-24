@@ -1,34 +1,38 @@
 #include <iostream>
+#include <cmath>
 using namespace std;
-int t;
-int* arr;
-void sol(int startIdx, int count, int list[]) {
-    if (count == 6) {
-        for (int i = 0;i < 6;i++)
-            cout << list[i] << " ";
-        cout << endl;
+
+int** arr;
+int dx[4] = {0,1,0,1};
+int dy[4] = {0,0,1,1};
+void sol(int startVal, int n,int y,int x) {
+    if (n == 2) {
+        
+        for (int dir = 0;dir < 4;dir++) {
+            int nextY = y + dy[dir], nextX = x + dx[dir];
+            arr[nextY][nextX] = startVal++;
+        }
         return;
     }
-    for (int i = startIdx;i < t;i++) {
-        list[count] = arr[i];
-        sol(i + 1, count + 1, list);
+    
+    int size = n / 2;
+    int c = 0;
+    for (int i = y;i < y + n;i += size) {
+        for (int j = x;j < x + n;j += size) {
+           
+            sol((c++ * size*size)+startVal, size, i, j);
+        }
     }
 }
 int main() {
-
-
-
-    while (1) {
-        cin >> t;
-        if (t == 0)
-            break;
-        arr = new int[t];
-        for (int i = 0;i < t;i++)
-            cin >> arr[i];
-        int list[6] = { 0 };
-        sol(0, 0, list);
-        cout << endl;
-
-    }
-
+    int n, r, c;
+    cin >> n >> r >> c;
+    int s = pow(2, n);
+    arr = new int* [s];
+    for (int i = 0;i < s;i++)
+        arr[i] = new int[s];
+    
+    sol(0,s, 0, 0);     
+    
+    cout << arr[r][c];
 }
